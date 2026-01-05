@@ -1,75 +1,73 @@
+import { Link } from 'expo-router';
+import React from 'react';
+import { Pressable, StyleSheet, Text, View } from 'react-native';
 
-import Box from '@/components/Box';
-import { generateBoard } from '@/utils/game';
-import React, { useEffect, useState } from 'react';
-import { Button, StyleSheet, View } from 'react-native';
-
-const SIZE = 20;
-const BOMBS = 40;
-
-export default function Index() {
-  const [tab, setTab] = useState<number[][]>([]);
-  const [revealed, setRevealed] = useState<boolean[][]>([]);
-  const [gameOver, setGameOver] = useState(false);
-
-  useEffect(() => {
-    resetGame();
-  }, []);
-
-  const handlePress = (row: number, col: number) => {
-    if (gameOver || revealed[row][col]) return;
-
-    const newRevealed = revealed.map(r => [...r]);
-    newRevealed[row][col] = true;
-
-    if (tab[row][col] === -1) {
-      // si bombe, révéler tout
-      for (let r = 0; r < SIZE; r++) {
-        for (let c = 0; c < SIZE; c++) {
-          newRevealed[r][c] = true;
-        }
-      }
-      setRevealed(newRevealed);
-      setGameOver(true);
-    } else {
-      setRevealed(newRevealed);
-    }
-  };
-
-  const resetGame = () => {
-    const board = generateBoard(SIZE, BOMBS);
-    setTab(board);
-    setRevealed(new Array(SIZE).fill(false).map(() => new Array(SIZE).fill(false)));
-    setGameOver(false);
-  };
-
+export default function HomeScreen() {
   return (
     <View style={styles.container}>
-      {tab.map((row, rowIndex) => (
-        <View key={rowIndex} style={styles.row}>
-          {row.map((cell, colIndex) => (
-            <Box
-              key={colIndex}
-              value={cell}
-              revealed={revealed[rowIndex][colIndex]}
-              onPress={() => handlePress(rowIndex, colIndex)}
-            />
-          ))}
-        </View>
-      ))}
+      <Text style={styles.logo}>💣</Text>
+      <Text style={styles.title}>DEMINEUR</Text>
 
-    
-      {gameOver && (
-        <View style={styles.buttonContainer}>
-          <Button title="Rejouer" onPress={resetGame} color="#1bb5fc" />
-        </View>
-      )}
+
+      <Link href="/game" asChild>
+        <Pressable style={styles.button}>
+          <Text style={styles.buttonText}>🎮 New Game</Text>
+        </Pressable>
+      </Link>
+
+     <Link href="/game" asChild>
+      <Pressable style={styles.button}>
+        <Text style={styles.buttonText}>▶️ Continu</Text>
+      </Pressable>
+     </Link>
+     
+      <Link href="/options" asChild>
+        <Pressable style={styles.button}>
+            <Text style={styles.buttonText}>⚙️ Options</Text>
+        </Pressable>
+      </Link>
+
+      
+     <Link href="/help" asChild>
+        <Pressable style={styles.button}>
+            <Text style={styles.buttonText}>❓ Help</Text>
+        </Pressable>
+    </Link>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { padding: 10, alignItems: 'center' },
-  row: { flexDirection: 'row' },
-  buttonContainer: { marginTop: 20 },
+  container: {
+    flex: 1,
+    backgroundColor: '#0f172a',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  logo: {
+    fontSize: 80,
+    marginBottom: 10,
+  },
+  title: {
+    fontSize: 32,
+    fontWeight: 'bold',
+    color: '#e5e7eb',
+    marginBottom: 40,
+  },
+  button: {
+    width: 220,
+    padding: 14,
+    borderRadius: 8,
+    backgroundColor: '#1bb5fc',
+    marginVertical: 8,
+    alignItems: 'center',
+  },
+  buttonText: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: '#0f172a',
+  },
+  disabled: {
+    opacity: 0.5,
+  },
 });
