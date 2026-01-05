@@ -1,5 +1,5 @@
-import React from 'react';
-import { Pressable, StyleSheet, Text } from 'react-native';
+import React from "react";
+import { Pressable, Text } from "react-native";
 
 interface BoxProps {
   value: number;
@@ -8,23 +8,23 @@ interface BoxProps {
 }
 
 const COLORS: Record<number, string> = {
-  1: '#00A2FF',
-  2: '#00B300',
-  3: '#FFD500',
-  4: '#FF8C00',
-  5: '#FF3B3B',
-  6: '#B80000',
+  1: "#00A2FF",
+  2: "#00B300",
+  3: "#FFD500",
+  4: "#FF8C00",
+  5: "#FF3B3B",
+  6: "#B80000",
 };
 
 function Box({ value, revealed, onPress }: BoxProps) {
-  let bgColor = revealed ? '#858889' : '#1bb5fc';
-  let text = '';
-  let textColor = COLORS[value] || 'black';
+  let bgColor = revealed ? "#858889" : "#1bb5fc";
+  let text = "";
+  let textColor = COLORS[value] || "black";
 
   if (revealed) {
     if (value === -1) {
-      text = '💣';
-      bgColor = '#6b6b6b';
+      text = "💣";
+      bgColor = "#6b6b6b";
     } else if (value > 0) {
       text = value.toString();
     }
@@ -33,11 +33,12 @@ function Box({ value, revealed, onPress }: BoxProps) {
   return (
     <Pressable
       onPress={onPress}
-      android_ripple={{ color: 'transparent' }}
-      style={[styles.box, { backgroundColor: bgColor }]}
+      android_ripple={{ color: "transparent" }}
+      className="w-5 h-5 border border-black items-center justify-center"
+      style={{ backgroundColor: bgColor }}
     >
-      {text !== '' && (
-        <Text style={{ color: textColor, fontWeight: 'bold' }}>
+      {text !== "" && (
+        <Text className="font-bold" style={{ color: textColor }}>
           {text}
         </Text>
       )}
@@ -46,14 +47,3 @@ function Box({ value, revealed, onPress }: BoxProps) {
 }
 
 export default React.memo(Box);
-
-const styles = StyleSheet.create({
-  box: {
-    width: 20,
-    height: 20,
-    borderWidth: 1,
-    borderColor: '#000',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});

@@ -2,7 +2,7 @@ import Box from "@/components/Box";
 import { generateBoard } from "@/utils/game";
 import * as Haptics from "expo-haptics";
 import React, { useEffect, useState } from "react";
-import { Button, StyleSheet, View } from "react-native";
+import { Button, View } from "react-native";
 
 const SIZE = 20;
 const BOMBS = 40;
@@ -98,9 +98,9 @@ export default function GameScreen() {
   };
 
   return (
-    <View style={styles.container}>
+    <View className="p-2.5 items-center">
       {board.map((row, rowIndex) => (
-        <View key={rowIndex} style={styles.row}>
+        <View key={rowIndex} className="flex-row">
           {row.map((cell, colIndex) => (
             <Box
               key={colIndex}
@@ -113,23 +113,10 @@ export default function GameScreen() {
       ))}
 
       {gameOver && (
-        <View style={styles.buttonContainer}>
+        <View className="mt-5">
           <Button title="Rejouer" onPress={initGame} color="#1bb5fc" />
         </View>
       )}
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    padding: 10,
-    alignItems: "center",
-  },
-  row: {
-    flexDirection: "row",
-  },
-  buttonContainer: {
-    marginTop: 20,
-  },
-});

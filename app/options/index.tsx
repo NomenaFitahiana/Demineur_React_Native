@@ -16,144 +16,73 @@ export default function OptionsScreen() {
   } = useGameStore();
 
   return (
-    <ScrollView contentContainerStyle={styles.container}>
-      <Text style={styles.mainTitle}>⚙️ Options</Text>
+    <ScrollView className="p-5 bg-slate-900 flex-grow">
+      <Text className="text-2xl font-bold text-gray-200 text-center mb-5">
+        ⚙️ Options
+      </Text>
 
-      <View style={styles.buttonContainer}>
-        <Pressable style={styles.button} onPress={decreaseVolume}>
-          <Text style={styles.buttonText}>-</Text>
+      <View className="w-full flex flex-row items-center justify-center">
+        <Pressable
+          className="w-11.75 p-3.5 rounded-lg bg-cyan-500 items-center"
+          onPress={decreaseVolume}
+        >
+          <Text className="text-base font-bold text-slate-900">-</Text>
         </Pressable>
 
-        <View style={styles.volumeBar}>
-          <View style={styles.volumeBarContainer}>
+        <View className="flex-row mx-2.5 items-center">
+          <View className="w-50 h-5 bg-gray-500 rounded-full overflow-hidden">
             <View
-              style={[styles.volumeBarFill, { width: `${volumeLevel}%` }]}
+              className="h-full bg-cyan-500"
+              style={{ width: `${volumeLevel}%` }}
             />
           </View>
-          <Text style={styles.volumeText}>{volumeLevel}%</Text>
+          <Text className="ml-2.5 text-gray-200 text-base font-bold">
+            {volumeLevel}%
+          </Text>
         </View>
 
-        <Pressable style={styles.button} onPress={increaseVolume}>
-          <Text style={styles.buttonText}>+</Text>
+        <Pressable
+          className="w-11.75 p-3.5 rounded-lg bg-cyan-500 items-center"
+          onPress={increaseVolume}
+        >
+          <Text className="text-base font-bold text-slate-900">+</Text>
         </Pressable>
 
         <Pressable
-          style={[styles.button, { marginHorizontal: 6 }]}
+          className="w-11.75 p-3.5 rounded-lg bg-cyan-500 items-center mx-1.5"
           onPress={toggleVolume}
         >
-          <Text style={styles.buttonText}>{onVolume ? "🔊" : "🔇"}</Text>
+          <Text className="text-base font-bold text-slate-900">
+            {onVolume ? "🔊" : "🔇"}
+          </Text>
         </Pressable>
       </View>
 
       <Pressable
-        style={[styles.button, { marginTop: 10 }]}
+        className="w-11.75 p-3.5 rounded-lg bg-cyan-500 items-center mt-2.5"
         onPress={toggleVibration}
       >
-        <Text style={styles.buttonText}>{onVibration ? "📳" : "🚫"}</Text>
+        <Text className="text-base font-bold text-slate-900">
+          {onVibration ? "📳" : "🚫"}
+        </Text>
       </Pressable>
 
-      <Text style={styles.sectionTitle}>Niveaux</Text>
-      <ScrollView
-        horizontal={true}
-        contentContainerStyle={styles.levelsContainer}
-      >
+      <Text className="text-xl font-bold text-gray-200 text-center my-5">
+        Niveaux
+      </Text>
+      <ScrollView horizontal={true} className="px-2.5 items-center">
         {[1, 2, 3].map((level) => (
           <Pressable
             key={level}
-            style={[
-              styles.levelButton,
-              gameLevel === level && styles.levelButtonSelected,
-            ]}
+            className={`w-15 h-15 rounded-full ${
+              gameLevel === level ? "bg-cyan-500" : "bg-gray-500"
+            } justify-center items-center mx-2.5`}
             onPress={() => setGameLevel(level)}
           >
-            <Text style={styles.levelButtonText}>{level}</Text>
+            <Text className="text-2xl font-bold text-slate-900">{level}</Text>
           </Pressable>
         ))}
       </ScrollView>
     </ScrollView>
   );
 }
-
-const styles = {
-  container: {
-    padding: 20,
-    backgroundColor: "#0f172a",
-    flexGrow: 1,
-  },
-  mainTitle: {
-    fontSize: 28,
-    fontWeight: "700" as const,
-    color: "#e5e7eb",
-    textAlign: "center" as const,
-    marginBottom: 20,
-  },
-  buttonContainer: {
-    width: "100%" as const,
-    display: "flex" as const,
-    flexDirection: "row" as const,
-    alignItems: "center" as const,
-    justifyContent: "center" as const,
-  },
-  button: {
-    width: 47,
-    padding: 14,
-    borderRadius: 8,
-    backgroundColor: "#1bb5fc",
-    alignItems: "center" as const,
-  },
-  buttonText: {
-    fontSize: 16,
-    fontWeight: "bold" as const,
-    color: "#0f172a",
-  },
-  volumeBar: {
-    flexDirection: "row" as const,
-    marginHorizontal: 10,
-    alignItems: "center" as const,
-  },
-  volumeBarContainer: {
-    width: 200,
-    height: 20,
-    backgroundColor: "#6b7280",
-    borderRadius: 10,
-    overflow: "hidden" as const,
-  },
-  volumeBarFill: {
-    height: "100%" as const,
-    backgroundColor: "#1bb5fc",
-  },
-  volumeText: {
-    marginLeft: 10,
-    color: "#e5e7eb",
-    fontSize: 16,
-    fontWeight: "bold" as const,
-  },
-  sectionTitle: {
-    fontSize: 20,
-    fontWeight: "700" as const,
-    color: "#e5e7eb",
-    textAlign: "center" as const,
-    marginVertical: 20,
-  },
-  levelsContainer: {
-    paddingHorizontal: 10,
-    alignItems: "center" as const,
-  },
-  levelButton: {
-    width: 60,
-    height: 60,
-    borderRadius: 30,
-    backgroundColor: "#6b7280",
-    justifyContent: "center" as const,
-    alignItems: "center" as const,
-    marginHorizontal: 10,
-  },
-  levelButtonSelected: {
-    backgroundColor: "#1bb5fc",
-  },
-  levelButtonText: {
-    fontSize: 24,
-    fontWeight: "bold" as const,
-    color: "#0f172a",
-  },
-};
