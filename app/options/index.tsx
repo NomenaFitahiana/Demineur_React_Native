@@ -8,33 +8,28 @@ export default function OptionsScreen() {
     volume,
     isVibrationEnabled,
     difficulty,
-    increaseVolume,
-    decreaseVolume,
     setVolume,
     toggleVibration,
     setDifficulty,
-    setPreviousVolume,
-    previousVolume,
   } = useGameStore();
+
+  const [tempVibration, setTempVibration] = React.useState(isVibrationEnabled);
+  const [tempDifficulty, setTempDifficulty] =
+    React.useState<DifficultyLevel>(difficulty);
 
   const [isDropdownOpen, setIsDropdownOpen] = React.useState(false);
 
-  const toggleDropdown = () => {
-    setIsDropdownOpen(!isDropdownOpen);
-  };
+  const increaseVolume = () => setVolume(Math.min(volume + 10, 100));
 
-  const handleDifficultySelect = (difficultyLevel: DifficultyLevel) => {
-    setDifficulty(difficultyLevel);
-    setIsDropdownOpen(false);
-  };
+  const decreaseVolume = () => setVolume(Math.max(volume - 10, 0));
 
-  const toggleMute = () => {
-    if (volume > 0) {
-      setPreviousVolume(volume);
-      setVolume(0);
-    } else {
-      setVolume(previousVolume > 0 ? previousVolume : 50);
+  const toggleMute = () => setVolume(volume > 0 ? 0 : 50);
+
+  const handleSave = () => {
+    if (tempVibration !== isVibrationEnabled) {
+      toggleVibration();
     }
+    setDifficulty(tempDifficulty);
   };
 
   return (
@@ -44,7 +39,6 @@ export default function OptionsScreen() {
     >
       <Text className="text-3xl font-bold text-gray-200 mb-8">⚙️ Settings</Text>
 
-      {/* 🔊 VOLUME */}
       <View className="w-full max-w-md bg-white/10 border border-gray-300 rounded-lg p-4 mb-6">
         <View className="flex-row items-center justify-between">
           <Pressable
@@ -82,25 +76,23 @@ export default function OptionsScreen() {
         </View>
       </View>
 
-      {/* 📳 VIBRATION */}
       <View className="w-full max-w-md bg-white/10 border border-gray-300 rounded-lg p-4 mb-6">
         <View className="flex-row items-center justify-between">
           <Text className="text-2xl font-bold text-gray-200">Vibration</Text>
 
           <Pressable
             className="w-20 h-12 rounded-full bg-gray-400 p-1"
-            onPress={toggleVibration}
+            onPress={() => setTempVibration((v) => !v)}
           >
             <View
               className={`h-full w-1/2 rounded-full ${
-                isVibrationEnabled ? "bg-green-400 ml-1" : "bg-gray-600 ml-auto"
+                tempVibration ? "bg-green-400 ml-1" : "bg-gray-600 ml-auto"
               }`}
             />
           </Pressable>
         </View>
       </View>
 
-      {/* 🎯 DIFFICULTY */}
       <View className="w-full max-w-md bg-white/10 border border-gray-300 rounded-lg p-4 mb-6">
         <Text className="text-2xl font-bold text-gray-200 mb-3">
           Difficulty
@@ -109,22 +101,25 @@ export default function OptionsScreen() {
         <View className="items-center">
           <Pressable
             className="w-48 h-12 rounded-lg bg-cyan-500 items-center justify-center mb-2"
-            onPress={toggleDropdown}
+            onPress={() => setIsDropdownOpen(!isDropdownOpen)}
           >
             <Text className="text-2xl font-bold text-slate-900">
-              {difficulty.name}
+              {tempDifficulty.name}
             </Text>
           </Pressable>
 
           {isDropdownOpen && (
             <View className="w-48 rounded-lg bg-gray-200 overflow-hidden">
-              {Object.values(DIFFICULTY_LEVELS).map((item, index) => (
+              {Object.values(DIFFICULTY_LEVELS).map((item) => (
                 <Pressable
                   key={item.name}
                   className={`h-12 items-center justify-center ${
-                    difficulty.name === item.name ? "bg-green-400" : ""
+                    tempDifficulty.name === item.name ? "bg-green-400" : ""
                   }`}
-                  onPress={() => handleDifficultySelect(item)}
+                  onPress={() => {
+                    setTempDifficulty(item);
+                    setIsDropdownOpen(false);
+                  }}
                 >
                   <Text className="text-2xl font-bold text-slate-900">
                     {item.name}
@@ -135,6 +130,13 @@ export default function OptionsScreen() {
           )}
         </View>
       </View>
+
+      <Pressable
+        className="w-[60%] h-14 bg-green-400 rounded-lg items-center justify-center mt-4"
+        onPress={handleSave}
+      >
+        <Text className="text-2xl font-bold text-slate-900">Save</Text>
+      </Pressable>
     </ScrollView>
   );
 }
