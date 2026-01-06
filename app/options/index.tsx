@@ -33,9 +33,7 @@ export default function OptionsScreen() {
       setPreviousVolume(volume);
       setVolume(0);
     } else {
-      // Augmenter le volume au volume précédent ou à 50
-      const targetVolume = previousVolume > 0 ? previousVolume : 50;
-      setVolume(targetVolume);
+      setVolume(previousVolume > 0 ? previousVolume : 50);
     }
   };
 
@@ -46,7 +44,7 @@ export default function OptionsScreen() {
     >
       <Text className="text-3xl font-bold text-gray-200 mb-8">⚙️ Settings</Text>
 
-      {/* Volume */}
+      {/* 🔊 VOLUME */}
       <View className="w-full max-w-md bg-white/10 border border-gray-300 rounded-lg p-4 mb-6">
         <View className="flex-row items-center justify-between">
           <Pressable
@@ -82,10 +80,9 @@ export default function OptionsScreen() {
             <Text className="text-2xl">{volume > 0 ? "🔊" : "🔇"}</Text>
           </Pressable>
         </View>
-        <View className="border-t border-gray-300 mt-4" />
       </View>
 
-      {/* Vibration */}
+      {/* 📳 VIBRATION */}
       <View className="w-full max-w-md bg-white/10 border border-gray-300 rounded-lg p-4 mb-6">
         <View className="flex-row items-center justify-between">
           <Text className="text-2xl font-bold text-gray-200">Vibration</Text>
@@ -101,13 +98,12 @@ export default function OptionsScreen() {
             />
           </Pressable>
         </View>
-        <View className="border-t border-gray-300 mt-4" />
       </View>
 
-      {/* Difficulty + Dropdown */}
+      {/* 🎯 DIFFICULTY */}
       <View className="w-full max-w-md bg-white/10 border border-gray-300 rounded-lg p-4 mb-6">
         <Text className="text-2xl font-bold text-gray-200 mb-3">
-          Niveau de difficulté
+          Difficulty
         </Text>
 
         <View className="items-center">
@@ -122,43 +118,23 @@ export default function OptionsScreen() {
 
           {isDropdownOpen && (
             <View className="w-48 rounded-lg bg-gray-200 overflow-hidden">
-              {(() => {
-                const difficultyLevels = Object.values(DIFFICULTY_LEVELS);
-                return difficultyLevels.map((item, index) => (
-                  <Pressable
-                    key={(item as DifficultyLevel).name}
-                    className={`h-12 items-center justify-center ${
-                      index < difficultyLevels.length - 1
-                        ? "border-b border-gray-400"
-                        : ""
-                    } ${
-                      difficulty.name === (item as DifficultyLevel).name
-                        ? "bg-green-400"
-                        : ""
-                    }`}
-                    onPress={() =>
-                      handleDifficultySelect(item as DifficultyLevel)
-                    }
-                  >
-                    <Text className="text-2xl font-bold text-slate-900">
-                      {(item as DifficultyLevel).name}
-                    </Text>
-                  </Pressable>
-                ));
-              })()}
+              {Object.values(DIFFICULTY_LEVELS).map((item, index) => (
+                <Pressable
+                  key={item.name}
+                  className={`h-12 items-center justify-center ${
+                    difficulty.name === item.name ? "bg-green-400" : ""
+                  }`}
+                  onPress={() => handleDifficultySelect(item)}
+                >
+                  <Text className="text-2xl font-bold text-slate-900">
+                    {item.name}
+                  </Text>
+                </Pressable>
+              ))}
             </View>
           )}
         </View>
-        <View className="border-t border-gray-300 mt-4" />
       </View>
-
-      {/* Save Button */}
-      <Pressable
-        className="w-[45%] max-w-md h-12 bg-green-400 rounded-lg items-center justify-center mt-4"
-        onPress={() => console.log("Paramètres enregistrés!")}
-      >
-        <Text className="text-2xl font-bold text-slate-900">Enregistrer</Text>
-      </Pressable>
     </ScrollView>
   );
 }
